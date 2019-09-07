@@ -4,7 +4,9 @@ import { actions } from './store';
 
 const Home = props => {
   useEffect(() => {
-    props.getNewsList();
+    if (!props.newsList.length) {
+      props.getNewsList();
+    }
   }, []);
   const getList = () => {
     const { newsList } = props;
@@ -28,7 +30,13 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(
+const ExportHome = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Home);
+
+ExportHome.loadData = store => {
+  return store.dispatch(actions.getNewsList());
+};
+
+export default ExportHome;
