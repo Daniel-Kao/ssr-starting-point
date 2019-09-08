@@ -3,8 +3,8 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   target: 'node',
-  externals: [nodeExternals()],
   mode: 'development',
+  externals: [nodeExternals()],
   entry: path.resolve(__dirname, '../src/server/index.js'),
   output: {
     filename: 'bundle.js',
@@ -13,9 +13,24 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'isomorphic-style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: {
+                localIdentName: '[name]_[local]_[hash:base64:5]',
+              },
+            },
+          },
+        ],
       },
     ],
   },

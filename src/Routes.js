@@ -1,6 +1,7 @@
 import Home from './containers/Home';
 import Login from './containers/Login';
 import App from './App';
+import PageNotFound from './components/PageNotFound';
 
 export default [
   {
@@ -19,6 +20,9 @@ export default [
         path: '/login',
         component: Login,
         key: 'login',
+      },
+      {
+        component: PageNotFound,
       },
     ],
   },

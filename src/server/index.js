@@ -1,11 +1,11 @@
-const express = require('express');
-const app = express();
-import routes from '../Routes';
-import { matchRoutes } from 'react-router-config';
+import express from 'express';
 import { render } from './utils';
 import { getStore } from '../store';
-const proxy = require('express-http-proxy');
+import { matchRoutes } from 'react-router-config';
+import routes from '../Routes';
+import proxy from 'express-http-proxy';
 
+const app = express();
 app.use(express.static('public'));
 
 app.use(
@@ -20,19 +20,35 @@ app.use(
 app.get('*', (req, res) => {
   const store = getStore();
 
-  const matchedRoutes = matchRoutes(routes, req.url);
-
   const promises = [];
+
+  const matchedRoutes = matchRoutes(routes, req.url);
 
   matchedRoutes.forEach(item => {
     if (item.route.loadData) {
-      promises.push(item.route.loadData(store));
+      const promise = new Promise((resolve, reject) => {
+        item.route
+          .loadData(store)
+          .then(resolve)
+          .catch(resolve);
+      });
+      promises.push(promise);
     }
   });
-
   Promise.all(promises).then(() => {
-    res.send(render(req, store, routes));
+    const context = { css: [] };
+    const html = render(req, store, routes, context);
+    if (context.action === 'REPLACE') {
+      res.redirect(301, path.url);
+    } else if (context.NOT_FOUND) {
+      res.status(404);
+      res.send(html);
+    } else {
+      res.send(html);
+    }
   });
 });
 
-app.listen(3000, () => console.log('port listening on port 3000'));
+app.listen(3000, () => {
+  console.log('server running on port 3000');
+});

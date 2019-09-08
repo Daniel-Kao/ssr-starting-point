@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import styles from './style.css';
+import withStylesHoc from '../withStylesHoc';
 
 const Header = () => {
   return (
-    <div>
+    <div className={styles.test}>
       <Link to="/">Home</Link>
-      <br />
-      <Link to="/login">Login</Link>
+      <Link to="/login">login</Link>
     </div>
   );
 };
 
-export default Header;
+export default withStylesHoc(Header, styles);

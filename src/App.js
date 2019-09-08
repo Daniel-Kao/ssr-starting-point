@@ -1,16 +1,14 @@
 import React from 'react';
 import Header from './components/Header';
 import { renderRoutes } from 'react-router-config';
-import routes from './Routes';
 
-const App = props => {
-  console.log(props.route);
+const Login = props => {
   return (
     <div>
-      <Header />
+      <Header staticContext={props.staticContext} />
       {renderRoutes(props.route.routes)}
     </div>
   );
 };
 
-export default App;
+export default Login;

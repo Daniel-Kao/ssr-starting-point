@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { actions } from './store';
+import styles from './style.css';
+import withStylesHoc from '../../components/withStylesHoc';
 
 const Home = props => {
   useEffect(() => {
@@ -15,6 +17,7 @@ const Home = props => {
   return (
     <div>
       <div>{getList()}</div>
+      <h1 className={styles.test}>hi nihao</h1>
     </div>
   );
 };
@@ -33,7 +36,7 @@ const mapDispatchToProps = dispatch => ({
 const ExportHome = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Home);
+)(withStylesHoc(Home, styles));
 
 ExportHome.loadData = store => {
   return store.dispatch(actions.getNewsList());
